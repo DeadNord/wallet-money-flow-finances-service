@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: test_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5432:5432" # Опционально, только если вам нужен доступ к БД с хоста
+
+  api:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      # Убедитесь, что эти переменные среды совпадают с вашими настройками в Django settings.py
+      DJANGO_DB_NAME: test_db
+      DJANGO_DB_USER: postgres
+      DJANGO_DB_PASSWORD: 12345
+      DJANGO_DB_HOST: db # Имя сервиса 'db' определенное в этом файле
+      DJANGO_DB_PORT: 5432
+    stdin_open: true
+    tty: true
+
+volumes:
+  postgres_data:
