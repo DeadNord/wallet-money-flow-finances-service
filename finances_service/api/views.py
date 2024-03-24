@@ -147,3 +147,10 @@ class DeleteTransactionView(APIView):
             {"message": "Transaction deleted successfully"},
             status=status.HTTP_204_NO_CONTENT,
         )
+
+
+class CategoriesView(APIView):
+    def get(self, request, *args, **kwargs):
+        categories_service = CategoriesService()
+        categories = categories_service.get_all_categories()
+        return Response(categories, status=status.HTTP_200_OK)
