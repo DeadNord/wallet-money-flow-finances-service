@@ -6,7 +6,6 @@ This Finances Service API is designed to manage users' financial transactions an
 
 ## Features
 
-- User registration and authentication.
 - Budget setting and tracking.
 - Transaction recording for both income and expenses.
 - Categorization of transactions.
