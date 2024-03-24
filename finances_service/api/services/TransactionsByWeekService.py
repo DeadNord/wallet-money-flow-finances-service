@@ -1,7 +1,6 @@
 # services.py
 import datetime
 from collections import defaultdict
-from django.db.models import Sum
 from ..models import Transaction, UserProfile, TransactionType
 
 class TransactionsByWeekService:

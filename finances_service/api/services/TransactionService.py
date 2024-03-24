@@ -18,13 +18,10 @@ class TransactionService:
         return transactions
 
     def delete_transaction(self, user_id, transaction_id):
-        try:
-            user_profile = UserProfile.objects.get(user__id=user_id)
-            transaction = Transaction.objects.get(id=transaction_id, owner=user_profile)
-        except ObjectDoesNotExist:
-            return None
+
+        user_profile = UserProfile.objects.get(user__id=user_id)
+        transaction = Transaction.objects.get(id=transaction_id, owner=user_profile)
         transaction.delete()
-        return transaction
 
     def add_transaction(self, user_id, transaction_data):
         # Получаем профиль пользователя

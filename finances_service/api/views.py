@@ -1,7 +1,8 @@
+from marshmallow import ValidationError
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
-from .models import UserProfile
+from .models import Transaction, UserProfile
 from .serializers import TransactionSerializer
 from .services import (
     BudgetService,
@@ -60,8 +61,9 @@ class ExpensesByCategoriesView(APIView):
             )
 
         service = ExpensesByCategoriesService()
-        expenses_data = service.get_expenses_by_categories(user_id)
-        if expenses_data is None:
+        try:
+            expenses_data = service.get_expenses_by_categories(user_id)
+        except UserProfile.DoesNotExist:  # Теперь мы ловим исключение здесь
             return Response(
                 {"error": "UserProfile does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
@@ -100,20 +102,22 @@ class AddTransactionView(APIView):
         transaction_service = TransactionService()
 
         try:
-            transaction, errors = transaction_service.add_transaction(
-                user_id, request.data
+            transaction = transaction_service.add_transaction(user_id, request.data)
+            return Response(
+                TransactionSerializer(transaction).data, status=status.HTTP_201_CREATED
             )
-            if transaction:
-                return Response(
-                    TransactionSerializer(transaction).data,
-                    status=status.HTTP_201_CREATED,
-                )
-            else:
-                return Response(errors, status=status.HTTP_400_BAD_REQUEST)
         except UserProfile.DoesNotExist:
             return Response(
                 {"error": "UserProfile does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
+            )
+        except ValidationError as e:
+            # Если данные не прошли валидацию в сериализаторе
+            return Response({"error": e.detail}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Обработка других неожиданных исключений
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
 
@@ -126,10 +130,16 @@ class DeleteTransactionView(APIView):
             )
 
         transaction_service = TransactionService()
-        transaction = transaction_service.delete_transaction(user_id, id)
-        if transaction is None:
+        try:
+            transaction_service.delete_transaction(user_id, id)
+        except UserProfile.DoesNotExist:
             return Response(
-                {"error": "Transaction does not exist or you do not have permission"},
+                {"error": " User profile does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Transaction.DoesNotExist:
+            return Response(
+                {"error": "Transaction does not exist"},
                 status=status.HTTP_404_NOT_FOUND,
             )
 
