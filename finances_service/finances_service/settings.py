@@ -33,7 +33,7 @@ DEBUG = PYTHON_ENV == "development"
 
 ALLOWED_HOSTS = []
 
-if PYTHON_ENV:
+if PYTHON_ENV == "development":
     CORS_ALLOW_ALL_ORIGINS = True
 else:
     raw_cors_origins = os.environ.get("CORS_ALLOWED_ORIGINS", "")
@@ -66,15 +66,15 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "corsheaders",
     "api",
     "rest_framework",
     "drf_yasg",
-    "corsheaders",
 ]
 
 SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS": {
-        "User": {"type": "apiKey", "name": "user_id", "in": "header"},
+        "User": {"type": "apiKey", "name": "user-id", "in": "header"},
     }
 }
 

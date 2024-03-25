@@ -2,15 +2,15 @@ from marshmallow import ValidationError
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
+
 from .models import Transaction, UserProfile
 from .serializers import TransactionSerializer
-from .services import (
-    TransactionService,
-    ExpensesByCategoriesService,
-    TransactionsByWeekService,
-    UserProfileService,
-    CategoriesService,
-)
+
+from .services.UserProfileService import UserProfileService
+from .services.TransactionService import TransactionService
+from .services.TransactionsByWeekService import TransactionsByWeekService
+from .services.ExpensesByCategoriesService import ExpensesByCategoriesService
+from .services.CategoriesService import CategoriesService
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.throttling import ScopedRateThrottle
 
@@ -24,9 +24,7 @@ class CreateUserProfileView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def post(self, request, *args, **kwargs):
-        print(request.headers)
-        # user_id = request.headers.get("User_id")
-        user_id = request.META.get("HTTP_USER_ID")
+        user_id = request.headers.get("user-id")
         print(user_id)
         if not user_id:
             return Response(
@@ -36,7 +34,7 @@ class CreateUserProfileView(BaseView):
         user_profile_service = UserProfileService()
         try:
             # Используйте сервис для создания UserProfile
-            user_profile_service(user_id)
+            user_profile_service.create_user_profile(user_id)
             return Response(
                 {"message": "UserProfile created successfully"},
                 status=status.HTTP_201_CREATED,
@@ -47,6 +45,7 @@ class CreateUserProfileView(BaseView):
             )
         except Exception as e:
             # Вывод общих ошибок
+            print(e)
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
