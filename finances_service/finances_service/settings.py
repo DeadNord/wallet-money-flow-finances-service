@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-d(en6je1+3iy8tmqjw)a3a+p(dn4cyw8&*wm^gdhcf=fqnv%3v"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-PYTHON_ENV = os.getenv("PYTHON_ENV", "development")
+PYTHON_ENV = os.environ.get("PYTHON_ENV", "development")
 DEBUG = PYTHON_ENV == "development"
 
 ALLOWED_HOSTS = []
@@ -36,7 +36,7 @@ ALLOWED_HOSTS = []
 if PYTHON_ENV:
     CORS_ALLOW_ALL_ORIGINS = True
 else:
-    raw_cors_origins = os.getenv("CORS_ALLOWED_ORIGINS", "")
+    raw_cors_origins = os.environ.get("CORS_ALLOWED_ORIGINS", "")
     CORS_ALLOWED_ORIGINS = raw_cors_origins.split(",") if raw_cors_origins else []
 
 CORS_ALLOW_HEADERS = [
@@ -52,7 +52,7 @@ CORS_ALLOW_HEADERS = [
 ]
 
 # Application definition
-GLOBAL_RATE_LIMIT = os.getenv("GLOBAL_RATE_LIMIT", "100/hour")
+GLOBAL_RATE_LIMIT = os.environ.get("RATE_LIMITING", "100/hour")
 
 REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": ["rest_framework.throttling.ScopedRateThrottle"],
@@ -114,15 +114,14 @@ WSGI_APPLICATION = "finances_service.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("DJANGO_DB_NAME", "default_db_name"),
-        "USER": os.getenv("DJANGO_DB_USER", "user"),
-        "PASSWORD": os.getenv("DJANGO_DB_PASSWORD", "password"),
-        "HOST": os.getenv("DJANGO_DB_HOST", "db"),
-        "PORT": os.getenv("DJANGO_DB_PORT", "5432"),
+        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+        "USER": os.environ.get("SQL_USER", "user"),
+        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+        "HOST": os.environ.get("SQL_HOST", "localhost"),
+        "PORT": os.environ.get("SQL_PORT", "5432"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
