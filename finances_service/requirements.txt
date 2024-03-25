@@ -3,3 +3,4 @@ django
 djangorestframework
 environs
 drf-yasg
+django-cors-headers==3.10.0

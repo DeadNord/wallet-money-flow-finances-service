@@ -27,4 +27,9 @@ urlpatterns = [
         views.DeleteTransactionView.as_view(),
         name="delete_transaction",
     ),
+    path(
+        "create_user_profile/",
+        views.CreateUserProfileView.as_view(),
+        name="create_user_profile",
+    ),
 ]

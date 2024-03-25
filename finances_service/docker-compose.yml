@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   db:
@@ -6,28 +6,34 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: test_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 12345
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    expose:
+      - "5433"
     ports:
-      - "5432:5432" # Опционально, только если вам нужен доступ к БД с хоста
+      - "5433:5433"
+    command: -p 5433
 
   api:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    image: finances_service:1.0
+    command: python manage.py runserver 0.0.0.0:${API_PORT}
     volumes:
       - .:/usr/src/app
     ports:
-      - "8000:8000"
+      - "${API_PORT}:${API_PORT}"
     depends_on:
       - db
     environment:
-      # Убедитесь, что эти переменные среды совпадают с вашими настройками в Django settings.py
-      DJANGO_DB_NAME: test_db
-      DJANGO_DB_USER: postgres
-      DJANGO_DB_PASSWORD: 12345
-      DJANGO_DB_HOST: db # Имя сервиса 'db' определенное в этом файле
-      DJANGO_DB_PORT: 5432
+      DJANGO_DB_NAME: ${DB_NAME}
+      DJANGO_DB_USER: ${DB_USER}
+      DJANGO_DB_PASSWORD: ${DB_PASSWORD}
+      DJANGO_DB_HOST: ${DB_HOST}
+      DJANGO_DB_PORT: ${DB_PORT}
+      PYTHON_ENV: ${PYTHON_ENV}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      RATE_LIMITING: ${RATE_LIMITING}
     stdin_open: true
     tty: true
 

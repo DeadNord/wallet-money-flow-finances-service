@@ -1,5 +1,6 @@
 # Используйте официальный образ Python как базовый
 FROM python:3.9
+ENV API_PORT=$API_PORT
 
 # Установите рабочую директорию в контейнере
 WORKDIR /usr/src/app
@@ -12,7 +13,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Сделайте порт 8000 доступным за пределами контейнера
-EXPOSE 8000
+EXPOSE $API_PORT
+
 
 # Укажите команду для запуска сервера
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:$API_PORT"]

@@ -5,14 +5,56 @@ from rest_framework.response import Response
 from .models import Transaction, UserProfile
 from .serializers import TransactionSerializer
 from .services import (
-    BudgetService,
     TransactionService,
     ExpensesByCategoriesService,
     TransactionsByWeekService,
+    UserProfileService,
+    CategoriesService,
 )
+from drf_yasg.utils import swagger_auto_schema
+from rest_framework.throttling import ScopedRateThrottle
 
 
-class BudgetView(APIView):
+class BaseView(APIView):
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = "global"
+
+
+class CreateUserProfileView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
+    def post(self, request, *args, **kwargs):
+        print(request.headers)
+        # user_id = request.headers.get("User_id")
+        user_id = request.META.get("HTTP_USER_ID")
+        print(user_id)
+        if not user_id:
+            return Response(
+                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user_profile_service = UserProfileService()
+        try:
+            # Используйте сервис для создания UserProfile
+            user_profile_service(user_id)
+            return Response(
+                {"message": "UserProfile created successfully"},
+                status=status.HTTP_201_CREATED,
+            )
+        except UserProfile.DoesNotExist:
+            return Response(
+                {"error": "User does not exist"}, status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            # Вывод общих ошибок
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class BudgetView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         if not user_id:
@@ -20,9 +62,9 @@ class BudgetView(APIView):
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
             )
 
-        budget_service = BudgetService()
+        user_profile_service = UserProfileService()
         try:
-            data = budget_service.get_user_budget(user_id)
+            data = user_profile_service.get_user_budget(user_id)
             return Response(data, status=status.HTTP_200_OK)
         except UserProfile.DoesNotExist:
             return Response(
@@ -31,7 +73,9 @@ class BudgetView(APIView):
             )
 
 
-class TransactionsView(APIView):
+class TransactionsView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         name = request.query_params.get("name")
@@ -52,7 +96,9 @@ class TransactionsView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class ExpensesByCategoriesView(APIView):
+class ExpensesByCategoriesView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         if not user_id:
@@ -72,7 +118,9 @@ class ExpensesByCategoriesView(APIView):
         return Response(expenses_data, status=status.HTTP_200_OK)
 
 
-class TransactionsByWeekView(APIView):
+class TransactionsByWeekView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         if not user_id:
@@ -91,7 +139,9 @@ class TransactionsByWeekView(APIView):
             )
 
 
-class AddTransactionView(APIView):
+class AddTransactionView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
     def post(self, request, *args, **kwargs):
         user_id = request.data.get("user_id")
         if not user_id:
@@ -121,7 +171,9 @@ class AddTransactionView(APIView):
             )
 
 
-class DeleteTransactionView(APIView):
+class DeleteTransactionView(BaseView):
+
+    @swagger_auto_schema(security=[{"User": []}])
     def delete(self, request, id, *args, **kwargs):
         user_id = request.query_params.get("user_id")
         if not user_id:
@@ -149,7 +201,7 @@ class DeleteTransactionView(APIView):
         )
 
 
-class CategoriesView(APIView):
+class CategoriesView(BaseView):
     def get(self, request, *args, **kwargs):
         categories_service = CategoriesService()
         categories = categories_service.get_all_categories()
