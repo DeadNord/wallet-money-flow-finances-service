@@ -3,24 +3,34 @@ from .models import Transaction, Category, UserProfile
 
 
 class TransactionSerializer(serializers.ModelSerializer):
-    category_name = serializers.CharField(source="category.name", read_only=True)
+    owner_id = serializers.PrimaryKeyRelatedField(
+        queryset=UserProfile.objects.all(), write_only=True, source="owner"
+    )
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), source="category", write_only=True
+    )
 
     class Meta:
         model = Transaction
         fields = [
-            "id",
+            "owner_id",
             "name",
             "date",
             "amount",
             "type",
-            "category",
+            "category_id",
             "from_account",
             "note",
         ]
         depth = 1
 
     def create(self, validated_data):
-        # Преобразование имени категории в объект Category
+        owner = validated_data.get("owner")
+        category = validated_data.get("category")
+        if owner:
+            validated_data["owner"] = owner
+        if category:
+            validated_data["category"] = category
         return Transaction.objects.create(**validated_data)
 
 

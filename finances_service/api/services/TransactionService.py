@@ -23,14 +23,11 @@ class TransactionService:
         transaction.delete()
 
     def add_transaction(self, user_id, transaction_data):
-        # Получаем профиль пользователя
-        user_profile = UserProfile.objects.get(user_id=user_id)
 
-        # Добавляем id владельца к данным транзакции
-        transaction_data["owner"] = user_profile
-
-        # Создаем и возвращаем транзакцию
+        transaction_data["owner_id"] = user_id
         serializer = TransactionSerializer(data=transaction_data)
-        if serializer.is_valid(raise_exception=True):
-            return serializer.save(), None
-        return None, serializer.errors
+        if serializer.is_valid():
+            transaction = serializer.save()
+            return transaction  # Return the transaction directly if successful
+        else:
+            return None, serializer.errors

@@ -21,7 +21,7 @@ class UserProfile(models.Model):
     budget_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
     def __str__(self):
-        return f"UserProfile {self.id}"
+        return f"UserProfile {self.user_id}"
 
 
 class Transaction(models.Model):
