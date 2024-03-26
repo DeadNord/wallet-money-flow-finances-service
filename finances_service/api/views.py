@@ -25,7 +25,6 @@ class CreateUserProfileView(BaseView):
     @swagger_auto_schema(security=[{"User": []}])
     def post(self, request, *args, **kwargs):
         user_id = request.headers.get("user-id")
-        print(user_id)
         if not user_id:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
@@ -55,7 +54,7 @@ class BudgetView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get("user_id")
+        user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
@@ -76,7 +75,7 @@ class TransactionsView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get("user_id")
+        user_id = request.headers.get("user-id")
         name = request.query_params.get("name")
         start_date = request.query_params.get("start_date")
         end_date = request.query_params.get("end_date")
@@ -99,7 +98,7 @@ class ExpensesByCategoriesView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get("user_id")
+        user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
@@ -121,7 +120,7 @@ class TransactionsByWeekView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def get(self, request, *args, **kwargs):
-        user_id = request.query_params.get("user_id")
+        user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
@@ -142,7 +141,7 @@ class AddTransactionView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def post(self, request, *args, **kwargs):
-        user_id = request.data.get("user_id")
+        user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
@@ -174,7 +173,7 @@ class DeleteTransactionView(BaseView):
 
     @swagger_auto_schema(security=[{"User": []}])
     def delete(self, request, id, *args, **kwargs):
-        user_id = request.query_params.get("user_id")
+        user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
                 {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
