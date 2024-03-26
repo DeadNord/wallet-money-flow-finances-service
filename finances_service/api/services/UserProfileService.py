@@ -7,11 +7,11 @@ from ..models import Transaction, UserProfile, TransactionType
 class UserProfileService:
     def create_user_profile(self, user_id):
 
-        UserProfile.objects.create(id=user_id)
+        UserProfile.objects.create(user_id=user_id)
 
     def get_user_budget(self, user_id):
         user_profile = UserProfile.objects.get(
-            user__id=user_id
+            user_id=user_id
         )  # Репозиторий может быть вызван здесь, если нужна дополнительная абстракция
         today = timezone.now().date()
         total_expenses = (

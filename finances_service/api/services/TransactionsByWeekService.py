@@ -6,7 +6,7 @@ from ..models import Transaction, UserProfile, TransactionType
 
 class TransactionsByWeekService:
     def get_transactions_by_week(self, user_id):
-        user_profile = UserProfile.objects.get(user__id=user_id)
+        user_profile = UserProfile.objects.get(user_id=user_id)
 
         # Получаем начало и конец текущей недели
         today = datetime.date.today()

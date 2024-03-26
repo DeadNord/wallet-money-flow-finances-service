@@ -17,7 +17,7 @@ class Category(models.Model):
 
 
 class UserProfile(models.Model):
-    id = models.CharField(primary_key=True, max_length=50)
+    user_id = models.CharField(primary_key=True, max_length=50)
     budget_limit = models.DecimalField(max_digits=10, decimal_places=2, default=0.0)
 
     def __str__(self):

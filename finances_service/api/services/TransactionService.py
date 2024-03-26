@@ -1,7 +1,6 @@
 # services.py
 from ..models import Transaction, UserProfile
 from django.db.models import Q
-from django.core.exceptions import ObjectDoesNotExist
 from ..serializers import TransactionSerializer
 
 
@@ -19,16 +18,16 @@ class TransactionService:
 
     def delete_transaction(self, user_id, transaction_id):
 
-        user_profile = UserProfile.objects.get(user__id=user_id)
+        user_profile = UserProfile.objects.get(user_id=user_id)
         transaction = Transaction.objects.get(id=transaction_id, owner=user_profile)
         transaction.delete()
 
     def add_transaction(self, user_id, transaction_data):
         # Получаем профиль пользователя
-        user_profile = UserProfile.objects.get(user__id=user_id)
+        user_profile = UserProfile.objects.get(user_id=user_id)
 
         # Добавляем id владельца к данным транзакции
-        transaction_data["owner"] = user_profile.id
+        transaction_data["owner"] = user_profile
 
         # Создаем и возвращаем транзакцию
         serializer = TransactionSerializer(data=transaction_data)

@@ -13,7 +13,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             "date",
             "amount",
             "type",
-            "category_name",
+            "category",
             "from_account",
             "note",
         ]
@@ -35,4 +35,4 @@ class CategorySerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ["user", "budget_limit"]
+        fields = ["user_id", "budget_limit"]

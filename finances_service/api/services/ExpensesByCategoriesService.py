@@ -7,7 +7,7 @@ class ExpensesByCategoriesService:
     def get_expenses_by_categories(self, user_id):
         # Получаем профиль пользователя и проверяем его на существование
 
-        user_profile = UserProfile.objects.get(user__id=user_id)
+        user_profile = UserProfile.objects.get(user_id=user_id)
 
         # Получаем транзакции пользователя за текущий месяц
         today = timezone.now().date()
