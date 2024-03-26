@@ -9,7 +9,7 @@ add_transaction_request_body = openapi.Schema(
         "date": openapi.Schema(type=openapi.TYPE_STRING, format="date"),
         "amount": openapi.Schema(type=openapi.TYPE_NUMBER),
         "type": openapi.Schema(type=openapi.TYPE_STRING),
-        "category": openapi.Schema(type=openapi.TYPE_STRING),
+        "category_id": openapi.Schema(type=openapi.TYPE_INTEGER),
         "from_account": openapi.Schema(type=openapi.TYPE_STRING),
         "note": openapi.Schema(type=openapi.TYPE_STRING),
     },
