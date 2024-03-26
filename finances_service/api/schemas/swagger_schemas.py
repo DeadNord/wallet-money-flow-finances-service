@@ -19,6 +19,15 @@ add_transaction_request_body = openapi.Schema(
     },
 )
 
+update_user_profile_budget_limit_schema = openapi.Schema(
+    type=openapi.TYPE_OBJECT,
+    properties={
+        "budget_limit": openapi.Schema(
+            type=openapi.TYPE_NUMBER, description="New budget limit"
+        )
+    },
+)
+
 # Define the schema for the transaction creation request
 transaction_query_params = [
     openapi.Parameter(

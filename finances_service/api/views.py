@@ -16,6 +16,7 @@ from rest_framework.throttling import ScopedRateThrottle
 from .schemas.swagger_schemas import add_transaction_request_body
 from .schemas.swagger_schemas import transaction_query_params
 from .schemas.swagger_schemas import delete_transaction_params
+from .schemas.swagger_schemas import update_user_profile_budget_limit_schema
 
 
 class BaseView(APIView):
@@ -171,6 +172,43 @@ class AddTransactionView(BaseView):
             return Response({"error": e.detail}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             # Обработка других неожиданных исключений
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+# В вашем views.py файле
+
+
+class UpdateUserBudgetLimitView(BaseView):
+
+    @swagger_auto_schema(
+        security=[{"User": []}],
+        request_body=update_user_profile_budget_limit_schema,
+    )
+    def patch(self, request, *args, **kwargs):
+        user_id = request.headers.get("user-id")
+        budget_limit = request.data.get("budget_limit")
+
+        if not user_id:
+            return Response(
+                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+        if budget_limit is None:
+            return Response(
+                {"error": "New budget limit is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        user_profile_service = UserProfileService()
+        try:
+            user_profile_service.update_user_budget_limit(user_id, budget_limit)
+        except UserProfile.DoesNotExist:
+            return Response(
+                {"error": "UserProfile does not exist"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Exception as e:
             return Response(
                 {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

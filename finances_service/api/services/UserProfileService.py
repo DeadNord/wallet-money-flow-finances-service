@@ -27,3 +27,9 @@ class UserProfileService:
             "budgetLimit": user_profile.budget_limit,
             "monthlyExpenses": total_expenses,
         }
+
+    def update_user_budget_limit(self, user_id, new_budget_limit):
+        user_profile = UserProfile.objects.get(user_id=user_id)
+        user_profile.budget_limit = new_budget_limit
+        user_profile.save()
+        return user_profile

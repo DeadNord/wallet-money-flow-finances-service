@@ -32,4 +32,9 @@ urlpatterns = [
         views.CreateUserProfileView.as_view(),
         name="create_user_profile",
     ),
+    path(
+        "update-budget/",
+        views.UpdateUserBudgetLimitView.as_view(),
+        name="update-user-budget-limit",
+    ),
 ]
