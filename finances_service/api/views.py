@@ -13,6 +13,9 @@ from .services.ExpensesByCategoriesService import ExpensesByCategoriesService
 from .services.CategoriesService import CategoriesService
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.throttling import ScopedRateThrottle
+from .schemas.swagger_schemas import add_transaction_request_body
+from .schemas.swagger_schemas import transaction_query_params
+from .schemas.swagger_schemas import delete_transaction_params
 
 
 class BaseView(APIView):
@@ -73,7 +76,9 @@ class BudgetView(BaseView):
 
 class TransactionsView(BaseView):
 
-    @swagger_auto_schema(security=[{"User": []}])
+    @swagger_auto_schema(
+        security=[{"User": []}], manual_parameters=transaction_query_params
+    )
     def get(self, request, *args, **kwargs):
         user_id = request.headers.get("user-id")
         name = request.query_params.get("name")
@@ -139,7 +144,9 @@ class TransactionsByWeekView(BaseView):
 
 class AddTransactionView(BaseView):
 
-    @swagger_auto_schema(security=[{"User": []}])
+    @swagger_auto_schema(
+        security=[{"User": []}], request_body=add_transaction_request_body
+    )
     def post(self, request, *args, **kwargs):
         user_id = request.headers.get("user-id")
         if not user_id:
@@ -171,7 +178,9 @@ class AddTransactionView(BaseView):
 
 class DeleteTransactionView(BaseView):
 
-    @swagger_auto_schema(security=[{"User": []}])
+    @swagger_auto_schema(
+        security=[{"User": []}], manual_parameters=delete_transaction_params
+    )
     def delete(self, request, id, *args, **kwargs):
         user_id = request.headers.get("user-id")
         if not user_id:

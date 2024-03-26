@@ -17,13 +17,11 @@ class TransactionSerializer(serializers.ModelSerializer):
             "from_account",
             "note",
         ]
+        depth = 1
 
     def create(self, validated_data):
         # Преобразование имени категории в объект Category
-        category_name = validated_data.pop("category_name")
-        category, _ = Category.objects.get_or_create(name=category_name)
-        transaction = Transaction.objects.create(**validated_data, category=category)
-        return transaction
+        return Transaction.objects.create(**validated_data)
 
 
 class CategorySerializer(serializers.ModelSerializer):
