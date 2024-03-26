@@ -9,6 +9,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     category_id = serializers.PrimaryKeyRelatedField(
         queryset=Category.objects.all(), source="category", write_only=True
     )
+    category_name = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Transaction
@@ -18,11 +19,15 @@ class TransactionSerializer(serializers.ModelSerializer):
             "date",
             "amount",
             "type",
+            "category_name",
             "category_id",
             "from_account",
             "note",
         ]
         depth = 1
+
+    def get_category_name(self, obj):
+        return obj.category.name if obj.category else None
 
     def create(self, validated_data):
         owner = validated_data.get("owner")

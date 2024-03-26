@@ -6,39 +6,44 @@ This Finances Service API is designed to manage users' financial transactions an
 
 ## Features
 
-- Budget setting and tracking.
-- Transaction recording for both income and expenses.
-- Categorization of transactions.
-- Reporting and analytics by category and time period.
+- **Budget setting and tracking**: Users can set and view their budget limits.
+- **Transaction recording**: Record both income and expense transactions.
+- **Categorization of transactions**: Organize transactions by categories.
+- **Reporting and analytics**: Provides summaries and analytics by category and time period.
 
 ## Installation
 
 To set up the project environment, follow these steps:
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/DeadNord/wallet-money-finances-service
 ```
 
 2. Navigate to the project directory:
+
 ```bash
 cd finances_service
 ```
 
 3. Build the Docker containers:
+
 ```bash
 docker-compose up --build
 ```
 
 ## Usage
 
-Once the Docker containers are up and running, you can access the API endpoints through `http://localhost:8000/`. Use the following endpoints to interact with the API:
+To use these endpoints, users will need to be authenticated and provide their unique user ID where required. Transactions can be added or deleted, and budget limits can be set and viewed, all through these endpoints.
 
-- `/api/budget/`: Retrieve and set the user's budget.
-- `/api/transactions/`: Record new transactions, list all transactions, and filter transactions by date or category.
-- `/api/expenses_by_category/`: Get a summary of expenses grouped by category.
-- `/api/transactions_by_week/`: Get the total income and expenses for each day of the current week.
-- `/api/add-transaction/`: Add a new financial transaction. This endpoint expects POST requests with the transaction data, including the transaction's name, amount, type (income or outcome), category, date, and any additional notes.
+## Endpoints
+
+- `/api/budget/`: Retrieve and set the user's budget. This endpoint allows users to view their current budget limit and update it to a new value.
+- `/api/transactions/`: List all transactions for the user, record new transactions, and filter transactions by date or category. This endpoint supports GET and POST methods to retrieve and add transactions, respectively.
+- `/api/expenses_by_category/`: Retrieve a summary of expenses grouped by category for the current month. This endpoint helps users to track how much they have spent in each category.
+- `/api/transactions_by_week/`: Get the total income and expenses for each day of the current week, helping users to understand their weekly financial activity.
+- `/api/add-transaction/`: Add a new financial transaction. This endpoint expects POST requests with the transaction data, including the transaction's name, amount, type (income or expense), category, date, and any additional notes.
 - `/api/delete-transaction/<int:id>/`: Delete an existing financial transaction by its unique ID. This endpoint expects DELETE requests and will remove the specified transaction from the user's records if it exists.
 
 ## API Documentation
@@ -60,7 +65,6 @@ For an alternative documentation format, you can view the Redoc documentation at
 Redoc provides a more structured and readable layout for the API documentation, including clear separation of endpoints, request parameters, and responses. It's particularly useful for understanding the overall structure of the API at a glance.
 
 Both Swagger UI and Redoc are automatically generated from the OpenAPI (formerly Swagger) specification for the Finances Service API. They are updated in real time as changes are made to the API.
-
 
 ## Contributing
 

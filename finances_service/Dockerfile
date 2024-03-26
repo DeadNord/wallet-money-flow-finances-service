@@ -1,20 +1,25 @@
-# Используйте официальный образ Python как базовый
+# Use the official Python image as the base image
 FROM python:3.9
-ENV API_PORT=$API_PORT
 
-# Установите рабочую директорию в контейнере
+# Allow passing the API port as a build argument, default to 8000 if not provided
+ARG API_PORT=8000
+# Set the API_PORT environment variable to match the build argument
+ENV API_PORT=${API_PORT}
+
+# Set the working directory inside the container
 WORKDIR /usr/src/app
 
-# Установите зависимости
+# Copy the Python dependencies file to the container and install them.
+# This ensures that the dependencies are cached and only need to be reinstalled if they change.
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируйте код проекта в контейнер
+# Copy the rest of the project's code into the container
 COPY . .
 
-# Сделайте порт 8000 доступным за пределами контейнера
+# Make the service's port available outside the container
 EXPOSE $API_PORT
 
-
-# Укажите команду для запуска сервера
-CMD ["python", "manage.py", "runserver", "0.0.0.0:$API_PORT"]
+# Define the default command to run the Django development server on the specified port
+# The port number is taken from the API_PORT environment variable
+CMD ["sh", "-c", "python manage.py runserver 0.0.0.0:${API_PORT}"]
