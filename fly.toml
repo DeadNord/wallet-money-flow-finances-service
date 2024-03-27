@@ -1,0 +1,29 @@
+# fly.toml app configuration file generated for wallet-money-finances-service on 2024-03-27T19:20:26+01:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'wallet-money-finances-service'
+primary_region = 'ams'
+
+[[services]]
+  internal_port = 3003
+  protocol = "tcp"
+
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.ports]]
+    handlers = ["http"]
+    port = 80  # HTTP
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443  # HTTPS
+
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1

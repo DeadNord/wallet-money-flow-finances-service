@@ -15,6 +15,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+import os
 from django.urls import include, path
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -29,6 +30,7 @@ schema_view = get_schema_view(
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
+    url=os.environ.get("SERVICE_URL", "http://localhost:3003"),
 )
 urlpatterns = [
     path("api/finances/", include("api.urls")),

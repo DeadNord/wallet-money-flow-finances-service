@@ -28,7 +28,8 @@ SECRET_KEY = "django-insecure-d(en6je1+3iy8tmqjw)a3a+p(dn4cyw8&*wm^gdhcf=fqnv%3v
 PYTHON_ENV = os.environ.get("PYTHON_ENV", "development")
 DEBUG = PYTHON_ENV == "development"
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
 if PYTHON_ENV == "development":
     CORS_ALLOW_ALL_ORIGINS = True
