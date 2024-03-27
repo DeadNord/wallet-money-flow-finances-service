@@ -29,8 +29,20 @@ cd finances_service
 
 3. Build the Docker containers:
 
+### Development:
+
+To build and run the containers in a development environment, execute the following command:
+
 ```bash
-docker-compose up --build
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up --build
+```
+
+### Production:
+
+To run the containers in a production environment, use the following command:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build
 ```
 
 ## Usage
@@ -84,3 +96,7 @@ Contributions to the Finances Service API are welcome! Please fork the repositor
 ## License
 
 This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+```
+
+```

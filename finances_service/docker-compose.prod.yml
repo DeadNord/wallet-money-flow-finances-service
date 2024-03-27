@@ -1,0 +1,7 @@
+version: "3.8"
+
+services:
+  api:
+    command: gunicorn finances_service.wsgi:application --bind 0.0.0.0:${API_PORT}
+    ports:
+      - "${API_PORT}:${API_PORT}"

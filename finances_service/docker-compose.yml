@@ -2,30 +2,20 @@ version: "3.8"
 
 services:
   db:
-    image: postgres:13 # Use the official Postgres version 13 image from Docker Hub
+    image: postgres:13
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Persist database data between container restarts
+      - postgres_data:/var/lib/postgresql/data
     environment:
-      POSTGRES_DB: ${SQL_DATABASE} # Database name, retrieved from environment variables
-      POSTGRES_USER: ${SQL_USER} # Database user, retrieved from environment variables
-      POSTGRES_PASSWORD: ${SQL_PASSWORD} # Database password, retrieved from environment variables
-    ports:
-      - "${SQL_PORT}:${SQL_PORT}" # Expose PostgreSQL port to the host, both defined in .env
+      POSTGRES_DB: ${SQL_DATABASE}
+      POSTGRES_USER: ${SQL_USER}
+      POSTGRES_PASSWORD: ${SQL_PASSWORD}
 
   api:
-    build: . # Build the Docker image for the API service using the Dockerfile in the current directory
-    image: finances_service:1.0 # Name and tag the built image
-    command: python manage.py runserver 0.0.0.0:${API_PORT} # Override the default command to run the Django server
-    volumes:
-      - .:/usr/src/app # Mount the current directory into the container for live code changes
-    ports:
-      - "${API_PORT}:${API_PORT}" # Expose API service port, defined in .env
-    depends_on:
-      - db # Ensure the database service (db) is started before the api service
+    build: .
     env_file:
-      - ./.env # Load environment variables from a file named .env in the current directory
-    stdin_open: true # Keep stdin open (useful for interactive debugging)
-    tty: true # Allocate a pseudo-TTY (useful for interactive debugging)
+      - ./.env
+    depends_on:
+      - db
 
 volumes:
-  postgres_data: # Define a named volume for the PostgreSQL data
+  postgres_data:
