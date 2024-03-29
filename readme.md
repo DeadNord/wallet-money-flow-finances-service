@@ -83,7 +83,7 @@ This provides a detailed overview of all API endpoints, including request parame
 
 For an alternative documentation format, you can view the Redoc documentation at:
 
-- Redoc: [http://localhost:8000/redoc/](http://localhost:8000/redoc/)
+- Redoc: [http://localhost:8000/redoc/](http://localhost:8000/docs/)
 
 Redoc provides a more structured and readable layout for the API documentation, including clear separation of endpoints, request parameters, and responses. It's particularly useful for understanding the overall structure of the API at a glance.
 
