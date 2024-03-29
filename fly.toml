@@ -7,7 +7,7 @@ app = 'wallet-money-finances-service'
 primary_region = 'ams'
 
 [[services]]
-  internal_port = 3003
+  internal_port = 80
   protocol = "tcp"
 
   [services.concurrency]
