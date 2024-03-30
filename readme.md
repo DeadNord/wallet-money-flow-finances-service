@@ -51,23 +51,23 @@ To use these endpoints, users will need to be authenticated and provide their un
 
 ## Endpoints
 
-- `/api/budget/`: Retrieve and set the user's budget. This endpoint allows users to view their current budget limit and update it to a new value.
+- `/api/finances/budget/`: Retrieve and set the user's budget. This endpoint allows users to view their current budget limit and update it to a new value.
 
-- `/api/transactions/`: List all transactions for the user, record new transactions, and filter transactions by date or category. This endpoint supports GET and POST methods to retrieve and add transactions, respectively.
+- `/api/finances/transactions/`: List all transactions for the user, record new transactions, and filter transactions by date or category. This endpoint supports GET and POST methods to retrieve and add transactions, respectively.
 
-- `/api/expenses_by_category/`: Retrieve a summary of expenses grouped by category for the current month. This endpoint helps users to track how much they have spent in each category.
+- `/api/finances/expenses_by_category/`: Retrieve a summary of expenses grouped by category for the current month. This endpoint helps users to track how much they have spent in each category.
 
-- `/api/transactions_by_week/`: Get the total income and expenses for each day of the current week, helping users to understand their weekly financial activity.
+- `/api/finances/transactions_by_week/`: Get the total income and expenses for each day of the current week, helping users to understand their weekly financial activity.
 
-- `/api/add-transaction/`: Add a new financial transaction. This endpoint expects POST requests with the transaction data, including the transaction's name, amount, type (income or expense), category, date, and any additional notes.
+- `/api/finances/add-transaction/`: Add a new financial transaction. This endpoint expects POST requests with the transaction data, including the transaction's name, amount, type (income or expense), category, date, and any additional notes.
 
-- `/api/delete-transaction/<int:id>/`: Delete an existing financial transaction by its unique ID. This endpoint expects DELETE requests and will remove the specified transaction from the user's records if it exists.
+- `/api/finances/delete-transaction/<int:id>/`: Delete an existing financial transaction by its unique ID. This endpoint expects DELETE requests and will remove the specified transaction from the user's records if it exists.
 
-- `/api/categories/`: List all the transaction categories. This endpoint helps users to get a list of all possible categories for transactions.
+- `/api/finances/categories/`: List all the transaction categories. This endpoint helps users to get a list of all possible categories for transactions.
 
-- `/api/create-user-profile/`: Create a new user profile. This endpoint allows for the creation of a new user profile with a specific user ID.
+- `/api/finances/create-user-profile/`: Create a new user profile. This endpoint allows for the creation of a new user profile with a specific user ID.
 
-- `/api/update-budget/`: Update the budget limit of a user's profile. This endpoint expects new budget limits to update the existing one.
+- `/api/finances/update-budget/`: Update the budget limit of a user's profile. This endpoint expects new budget limits to update the existing one.
 
 ## API Documentation
 
