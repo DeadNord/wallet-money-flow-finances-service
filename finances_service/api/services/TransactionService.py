@@ -28,7 +28,6 @@ class TransactionService:
             transactions_query &= Q(name__icontains=name)
         if start_date and end_date:
             transactions_query &= Q(date__range=[start_date, end_date])
-
         return Transaction.objects.filter(transactions_query)
 
     def delete_transaction(self, transaction_id, user_id):

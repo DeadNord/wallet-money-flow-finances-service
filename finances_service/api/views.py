@@ -86,7 +86,8 @@ class BudgetView(BaseView):
         # Validate that the user ID is provided
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Initialize the UserProfileService to retrieve user's budget information
@@ -114,7 +115,8 @@ class TransactionsView(BaseView):
         user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         try:
@@ -159,7 +161,8 @@ class ExpensesByCategoriesView(BaseView):
         # Ensure the user_id is provided, else return a 400 Bad Request response.
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Initialize the service to fetch expenses categorized by categories.
@@ -195,7 +198,8 @@ class TransactionsByWeekView(BaseView):
         user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         transactions_by_week_service = TransactionsByWeekService()
@@ -225,7 +229,8 @@ class AddTransactionView(BaseView):
         user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         # Utilize the transaction service to add a new transaction
@@ -271,7 +276,8 @@ class UpdateUserBudgetLimitView(BaseView):
         # Validating the presence of user_id and budget_limit in the request
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
         if budget_limit is None:
             return Response(
@@ -314,7 +320,8 @@ class DeleteTransactionView(BaseView):
         user_id = request.headers.get("user-id")
         if not user_id:
             return Response(
-                {"error": "User ID is required"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "User ID is required"},
+                status=status.HTTP_401_UNAUTHORIZED,
             )
 
         transaction_service = TransactionService()
@@ -348,7 +355,13 @@ class CategoriesView(BaseView):
         categories_service = CategoriesService()
 
         # Fetch all categories using the service
-        categories = categories_service.get_all_categories()
+        try:
+            categories = categories_service.get_all_categories()
+        except Exception as e:
+            # Handle unexpected exceptions
+            return Response(
+                {"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
         # Return the list of categories with a 200 OK status
         return Response(categories, status=status.HTTP_200_OK)

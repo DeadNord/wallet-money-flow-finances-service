@@ -29,7 +29,7 @@ PYTHON_ENV = os.environ.get("PYTHON_ENV", "development")
 DEBUG = PYTHON_ENV == "development"
 
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 if PYTHON_ENV == "development":
     CORS_ALLOW_ALL_ORIGINS = True
@@ -47,7 +47,12 @@ CORS_ALLOW_HEADERS = [
     "x-csrftoken",
     "x-requested-with",
     "user-id",
+    "cookie",
+    "referer",
 ]
+
+CORS_ALLOW_CREDENTIALS = True
+
 
 # Application definition
 GLOBAL_RATE_LIMIT = os.environ.get("RATE_LIMITING", "100/hour")
@@ -163,5 +168,5 @@ STATIC_URL = "/static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-APPEND_SLASH = False
+# APPEND_SLASH = False
 SECURE_SSL_REDIRECT = False
