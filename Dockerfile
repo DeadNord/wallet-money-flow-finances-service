@@ -17,4 +17,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the project's code into the container
 COPY . .
 
+RUN python ./finances_service/manage.py collectstatic --noinput
+
 CMD ["python", "./finances_service/manage.py", "runserver", "[::]:80"]

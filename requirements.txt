@@ -5,3 +5,4 @@ environs
 drf-yasg
 django-cors-headers==3.10.0
 gunicorn==21.2.0
+whitenoise
