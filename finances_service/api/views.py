@@ -125,6 +125,9 @@ class TransactionsView(BaseView):
             name = params.get("name")
             start_date = params.get("start_date")
             end_date = params.get("end_date")
+            name = None if name == "null" else name.strip() or None
+            start_date = None if start_date == "null" else start_date
+            end_date = None if end_date == "null" else end_date
 
             # Utilize the transaction service to retrieve user transactions
             transaction_service = TransactionService()

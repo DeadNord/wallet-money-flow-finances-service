@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Transaction, Category, UserProfile
+from .models import Transaction, Category, TransactionType, UserProfile
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -14,6 +14,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = [
+            "id",
             "owner_id",
             "name",
             "date",
@@ -31,7 +32,7 @@ class TransactionSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if "type" in data and data["type"] not in [
-            choice[0] for choice in Transaction.TransactionType.choices
+            choice[0] for choice in TransactionType.choices
         ]:
             raise serializers.ValidationError(
                 {"type": [f'"{data["type"]}" is not a valid choice.']}
