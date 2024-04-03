@@ -2,7 +2,7 @@
 # No standard library imports in this snippet.
 
 # Third-party imports
-from marshmallow import ValidationError
+from rest_framework.exceptions import ValidationError
 from drf_yasg.utils import swagger_auto_schema
 
 # Django imports

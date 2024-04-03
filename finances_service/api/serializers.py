@@ -29,6 +29,15 @@ class TransactionSerializer(serializers.ModelSerializer):
     def get_category_name(self, obj):
         return obj.category.name if obj.category else None
 
+    def validate(self, data):
+        if "type" in data and data["type"] not in [
+            choice[0] for choice in Transaction.TransactionType.choices
+        ]:
+            raise serializers.ValidationError(
+                {"type": [f'"{data["type"]}" is not a valid choice.']}
+            )
+        return data
+
     def create(self, validated_data):
         owner = validated_data.get("owner")
         category = validated_data.get("category")
