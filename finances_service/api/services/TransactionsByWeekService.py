@@ -36,22 +36,14 @@ class TransactionsByWeekService:
             lambda: {"income": Decimal("0.00"), "outcome": Decimal("0.00")}
         )
         for trans in transactions:
-            day_name = trans.date.strftime("%A")
+            day_name = trans.date.strftime("%a")
             transaction_type = (
                 "income" if trans.type == TransactionType.INCOME else "outcome"
             )
             transactions_by_day[day_name][transaction_type] += Decimal(trans.amount)
 
         # Sort the transactions by day of the week to maintain the order: Mon, Tue, Wed, etc.
-        days_order = [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-        ]
+        days_order = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         sorted_transactions = OrderedDict(
             sorted(transactions_by_day.items(), key=lambda x: days_order.index(x[0]))
         )
